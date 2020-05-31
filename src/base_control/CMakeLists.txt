@@ -37,7 +37,7 @@ catkin_package(
 ## Build ##
 ###########
 
-include_directories(
+include_directories( include 
   ${catkin_INCLUDE_DIRS}
   ${GAZEBO_INCLUDE_DIRS}
 )
@@ -47,11 +47,11 @@ link_directories(
 )
 
 ## Declare a C++ executable
-add_executable(base_control src/base_control_node.cc)
+add_executable(base_control_node src/base_control_node.cc src/mission.cpp)
 
-add_dependencies(base_control ${catkin_EXPORTED_TARGETS})
+add_dependencies(base_control_node ${catkin_EXPORTED_TARGETS})
 
-target_link_libraries(base_control ${catkin_LIBRARIES})
+target_link_libraries(base_control_node ${catkin_LIBRARIES})
 
 
 
@@ -69,7 +69,7 @@ install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
 
 # Mark executables and/or libraries for installation
-install(TARGETS base_control
+install(TARGETS base_control_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

@@ -24,7 +24,7 @@
 #include <string>
 #include <thread>
 
-#include "mission.h"
+#include "base_control/mission.h"
 
 /// \brief Robot base control class, running as a ROS node to control a robot.
 /// Based upon subt_seed_node.cc 
@@ -38,8 +38,14 @@ class BaseController
    public: BaseController(const std::string &name);
 
 
+   public: void Update();
+
+
    /// \brief ROS node handler
    private: ros::NodeHandle nh;
+
+   /// \brief mission state
+   private: MissionState missionState;
 
    /// \brief robot name
    private: std::string rname;
@@ -55,7 +61,38 @@ BaseController::BaseController(const std::string &name)
 
    // wait for the start service to be ready
 
+
+   this->missionState = MissionState::AWAIT_START;
+
+   ROS_DEBUG_STREAM("mission state: " << this->missionState);
+
    this->rname = name;
+}
+
+
+void BaseController::Update()
+{
+   switch(this->missionState)
+   {
+      case MissionState::AWAIT_START:
+         ROS_ERROR("BaseController::Update MissionState::AWAIT_START not completed");
+      break;
+      case MissionState::INIT:
+         ROS_ERROR("BaseController::Update MissionState::INIT not completed");
+      break;
+      case MissionState::FIND_ENTRANCE:
+         ROS_ERROR("BaseController::Update MissionState::AWAIT_START not completed");
+      break;
+      case MissionState::EXPLORE:
+         ROS_ERROR("BaseController::Update MissionState::AWAIT_START not completed");
+      break;
+      case MissionState::STANDBY:
+         ROS_ERROR("BaseController::Update MissionState::AWAIT_START not completed");
+      break;
+      case MissionState::STOP:
+         ROS_ERROR("BaseController::Update MissionState::AWAIT_START not completed");
+      break;
+   }
 }
 
 
@@ -85,16 +122,13 @@ int main(int argc, char** argv)
       ROS_DEBUG_STREAM("argv[" << i << "]: " << argv[i]);
    }
 
-
-   
-
    
    if(argc < 2 || std::strlen(argv[1]) == 0)
    {
      
       while(name.empty())
       {
-         ROS_INFO("retrieving name");
+         ROS_DEBUG("retrieving robot name");
          ros::master::V_TopicInfo masterTopics;
          ros::master::getTopics(masterTopics);
 
@@ -102,6 +136,7 @@ int main(int argc, char** argv)
             it != masterTopics.end(); ++it)
          {
             const ros::master::TopicInfo &info = *it;
+            ROS_DEBUG_STREAM("TopicInfo:info.name " << info.name);
             if(info.name.find("battery_state") != std::string::npos)
             {
                int rpos = info.name.rfind("/");
@@ -117,10 +152,11 @@ int main(int argc, char** argv)
    }
    else
    {
+      ROS_WARN_STREAM("Unexpected robot name is argv[1]: " << argv[1]);
       name = argv[1];
    }
 
-   ROS_INFO_STREAM("name: " << name);
+   ROS_INFO_STREAM("extracted name: " << name);
 
    BaseController baseController(name);
 
@@ -129,6 +165,7 @@ int main(int argc, char** argv)
    ros::Rate loop_rate(10);
    while(ros::ok())
    {
+      baseController.Update();
       ros::spinOnce();
       loop_rate.sleep();
    }

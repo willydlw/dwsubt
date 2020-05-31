@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Arguments -->
+  <arg name="robot_name" default="" />
+
+  <!-- sets log level-->
+  <env name="ROSCONSOLE_CONFIG_FILE" value="$(find base_control)/config/custom_rosconsole.conf"/>   
+
+  <!-- Launch your controller nodes -->
+  <node name="$(arg robot_name)dwsubt" pkg="base_control" type="base_control_node" output="screen" args="$(arg robot_name)"/>
+
+</launch>
