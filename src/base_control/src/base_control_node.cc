@@ -15,10 +15,16 @@
  *
 */
 
+#include <chrono>
+
 #include <ros/ros.h>
+#include <ros/console.h>
 #include <rosgraph_msgs/Clock.h>
 
 #include <string>
+#include <thread>
+
+#include "mission.h"
 
 /// \brief Robot base control class, running as a ROS node to control a robot.
 /// Based upon subt_seed_node.cc 
@@ -37,9 +43,10 @@ class BaseController
 
    /// \brief robot name
    private: std::string rname;
-}
 
-BaseController(const std::string &name)
+};
+
+BaseController::BaseController(const std::string &name)
 {
    ROS_INFO("Waiting for /clock, /subt/start, and /subt/pose_from_artifact");
    ROS_WARN("TODO: does each robot need to wait for /subt/start??");
@@ -54,6 +61,11 @@ BaseController(const std::string &name)
 
 int main(int argc, char** argv)
 {
+   if(ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug))
+   {
+      ros::console::notifyLoggerLevelsChanged();
+   }
+
 
    for(int i = 0; i < argc; ++i)
    {
@@ -67,10 +79,22 @@ int main(int argc, char** argv)
    ROS_INFO_STREAM("starting base control");
    std::string name;
 
+   ROS_INFO_STREAM("after ros::init, argc: " << argc);
+   for(int i = 0; i < argc; ++i)
+   {
+      ROS_DEBUG_STREAM("argv[" << i << "]: " << argv[i]);
+   }
+
+
+   
+
+   
    if(argc < 2 || std::strlen(argv[1]) == 0)
    {
+     
       while(name.empty())
       {
+         ROS_INFO("retrieving name");
          ros::master::V_TopicInfo masterTopics;
          ros::master::getTopics(masterTopics);
 
@@ -81,7 +105,7 @@ int main(int argc, char** argv)
             if(info.name.find("battery_state") != std::string::npos)
             {
                int rpos = info.name.rfind("/");
-               name = info.name.sbutstr(1, rpos - 1);
+               name = info.name.substr(1, rpos - 1);
             }
          }
 
@@ -96,7 +120,18 @@ int main(int argc, char** argv)
       name = argv[1];
    }
 
-   BaseController(name);
+   ROS_INFO_STREAM("name: " << name);
+
+   BaseController baseController(name);
+
+   ROS_INFO("constructed base controller");
+
+   ros::Rate loop_rate(10);
+   while(ros::ok())
+   {
+      ros::spinOnce();
+      loop_rate.sleep();
+   }
 
    return 0;
    

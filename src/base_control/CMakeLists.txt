@@ -47,7 +47,7 @@ link_directories(
 )
 
 ## Declare a C++ executable
-add_executable(base_control src/base_control.cc)
+add_executable(base_control src/base_control_node.cc)
 
 add_dependencies(base_control ${catkin_EXPORTED_TARGETS})
 
