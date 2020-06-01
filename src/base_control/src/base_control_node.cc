@@ -149,6 +149,8 @@ bool BaseController::StartUp()
 
 void BaseController::Update()
 {
+   static int printCount = 0;
+
    switch(this->missionState)
    {
       case MissionState::AWAIT_START:
@@ -173,20 +175,35 @@ void BaseController::Update()
          {
             this->missionState = MissionState::STANDBY;
             ROS_DEBUG("changing state from FIND_ENTRANCE to STANDBY");
+            printCount = 1;
          }
          else
          {
-            ROS_DEBUG("still seeking the entrance");
+            if(printCount % 10 == 0)
+            {
+               ROS_DEBUG("still seeking the entrance");
+               ++printCount;
+            }
+            
             this->MoveToEntrance();
          }
       break;
 
       case MissionState::EXPLORE:
+        
          ROS_ERROR("BaseController::Update MissionState::EXPLORE not completed");
       break;
+
       case MissionState::STANDBY:
-         ROS_ERROR("BaseController::Update MissionState::STANDBY not completed");
+         if(printCount == 1)
+         {
+            ROS_ERROR("BaseController::Update MissionState::STANDBY not completed");
+            ROS_INFO("no more messages after this one, press ctrl+c to end");
+            ++printCount;
+         }
+         
       break;
+
       case MissionState::STOP:
          ROS_ERROR("BaseController::Update MissionState::STOP not completed");
       break;
@@ -197,34 +214,13 @@ void BaseController::Update()
 
 void BaseController::MoveToEntrance(void)
 {
-
-  static int arrivalCount = 0;
-  if (this->arrived){
-    if(arrivalCount == 0)
-    {
-      bool call = this->originClient.call(this->originSrv);
-      if (!call || !this->originSrv.response.success)
-      {
-        ROS_ERROR("Failed to call pose_from_artifact_origin service, \
-        robot may not exist, be outside staging area, or the service is \
-        not available.");
-      }
-      auto pose = this->originSrv.response.pose.pose;
-      ROS_INFO("Arrival position, x: %.2f, y: %.2f, z: %.2f", pose.position.x, pose.position.y, pose.position.z);
-      arrivalCount += 1;
-    }
-    
-    return;
-  }
-    
-
   bool call = this->originClient.call(this->originSrv);
   // Query current robot position w.r.t. entrance
   if (!call || !this->originSrv.response.success)
   {
     ROS_ERROR("Failed to call pose_from_artifact_origin service, \
-robot may not exist, be outside staging area, or the service is \
-not available.");
+      robot may not exist, be outside staging area, or the service is \
+      not available.");
 
     // Stop robot
     geometry_msgs::Twist msg;
@@ -241,7 +237,7 @@ not available.");
   double dist = pose.position.x * pose.position.x +
     pose.position.y * pose.position.y;
 
-  ROS_INFO("Distance to goal: %.2f", dist);
+  //ROS_INFO("Distance to goal: %.2f", dist);
   
   // Arrived
   if (dist < 0.3 || pose.position.x >= -0.3)
@@ -263,8 +259,8 @@ not available.");
     double cosy_cosp = +1.0 - 2.0 * (q.y * q.y + q.z * q.z);
     auto yaw = atan2(siny_cosp, cosy_cosp);
 
-    ROS_INFO("yaw: %.2f", yaw);
-    ROS_INFO("position: x %.2f, y %.2f, z %.2f", pose.position.x, pose.position.y, pose.position.z);
+   // ROS_INFO("yaw: %.2f", yaw);
+    //ROS_INFO("position: x %.2f, y %.2f, z %.2f", pose.position.x, pose.position.y, pose.position.z);
 
     auto facingFront = abs(yaw) < 0.1;
     auto facingEast = abs(yaw + M_PI * 0.5) < 0.1;

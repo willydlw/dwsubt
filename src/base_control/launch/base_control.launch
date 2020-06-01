@@ -8,5 +8,9 @@
 
   <!-- Launch your controller nodes -->
   <node name="$(arg robot_name)dwsubt" pkg="base_control" type="base_control_node" output="screen" args="$(arg robot_name)"/>
+  <node name="lasertopoint" pkg="base_control" type="laserscan_to_pointcloud" output="screen" />
 
+  <!-- Launch rviz -->
+  <node type="rviz" name="rviz" pkg="rviz" args="-d /home/diane/dwsubt/src/base_control/rviz/pointcloud.rviz " />
+  
 </launch>

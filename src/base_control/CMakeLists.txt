@@ -48,10 +48,13 @@ link_directories(
 
 ## Declare a C++ executable
 add_executable(base_control_node src/base_control_node.cc src/mission.cpp)
+add_executable(laserscan_to_pointcloud src/laserscan_to_pointcloud.cpp)
 
 add_dependencies(base_control_node ${catkin_EXPORTED_TARGETS})
+add_dependencies(laserscan_to_pointcloud ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(base_control_node ${catkin_LIBRARIES})
+target_link_libraries(laserscan_to_pointcloud ${catkin_LIBRARIES})
 
 
 
@@ -69,7 +72,7 @@ install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
 
 # Mark executables and/or libraries for installation
-install(TARGETS base_control_node
+install(TARGETS base_control_node laserscan_to_pointcloud
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
