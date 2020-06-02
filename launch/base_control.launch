@@ -11,6 +11,6 @@
   <node name="lasertopoint" pkg="dwsubt" type="laserscan_to_pointcloud" output="screen" />
 
   <!-- Launch rviz -->
-  <node type="rviz" name="rviz" pkg="rviz" args="-d /home/diane/dwsubt/rviz/pointcloud.rviz " />
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find dwsubt)/rviz/pointcloud.rviz " />
   
 </launch>

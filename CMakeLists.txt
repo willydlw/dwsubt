@@ -69,7 +69,16 @@ target_link_libraries(laserscan_to_pointcloud ${catkin_LIBRARIES})
 
 # Install all the launch files
 install(DIRECTORY launch/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+  PATTERN ".git" EXCLUDE)
+
+install(DIRECTORY rviz/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/rviz
+  PATTERN ".git" EXCLUDE)
+
+install(DIRECTORY config/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
+  PATTERN ".git" EXCLUDE)
 
 # Mark executables and/or libraries for installation
 install(TARGETS base_control_node laserscan_to_pointcloud
