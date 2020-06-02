@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(base_control)
+project(dwsubt)
 
 
 if(NOT WIN32)
