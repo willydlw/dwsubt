@@ -33,7 +33,7 @@
 #include <string>
 #include <thread>
 
-#include "base_control/mission.h"
+#include "mission.h"
 
 /// \brief Robot base control class, running as a ROS node to control a robot.
 /// Based upon subt_seed_node.cc 

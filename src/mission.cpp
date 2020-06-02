@@ -1,4 +1,4 @@
-#include "base_control/mission.h"
+#include "mission.h"
 
 std::ostream& operator<<(std::ostream& os, MissionState ms)
 {
