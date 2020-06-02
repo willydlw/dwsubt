@@ -25,5 +25,5 @@ In the catkin workspace directory
 
 ```
 source ./install/setup.bash
-roslaunch base_control base_control.launch
+roslaunch dwsubt base_control.launch
 ```
