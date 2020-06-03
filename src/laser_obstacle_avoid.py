@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import rospy
 from rospy.numpy_msg import numpy_msg
 from sensor_msgs.msg import LaserScan
+from dwsubt.msg import Turn
 
 from itertools import *
 from operator import itemgetter
@@ -33,6 +34,7 @@ class LaserObstacleAvoid:
       # subscribers here
       self.laser_subscriber = rospy.Subscriber(self.SCAN_TOPIC, LaserScan,self.laser_callback, queue_size=1)
 
+      self.turn_publisher = rospy.Publisher("/avoid_obstacle_turn", Turn, queue_size=1)
      
       # pre-compute sin,cos values as they will be the same for each scan
       self.cosVal = np.cos(np.arange(self.ANGLE_MIN, self.ANGLE_MAX, self.ANGLE_INCREMENT))
@@ -113,6 +115,13 @@ class LaserObstacleAvoid:
       else:
          angz = self.Kp * (-1)*(90-turn_angle)
 
+      # publish turn angle
+      turn_msg = Turn()
+      turn_msg.header.stamp = rospy.Time.now()
+      turn_msg.anglez = angz
+
+      self.turn_publisher.publish(turn_msg)
+
       if self.printCount == 1:
          self.printCount += 1
 
@@ -124,19 +133,20 @@ class LaserObstacleAvoid:
 
          print("angz: " + str(angz) + str(" degrees"))
 
-         print("add code to publish angz")
-      
-
-
 
 
 def main():
    rospy.init_node('laser_avoid_obstacle')
    laserObstacleAvoid = LaserObstacleAvoid()
+
+   rate = rospy.Rate(10)   # Hz
+
+   while not rospy.is_shutdown():
+      rate.sleep()
   
    # rospy.spin is last line of code when a subscriber is involved
    # ensures subscribed messages will arrive
-   rospy.spin()
+   #rospy.spin()
    
 
 if __name__ == "__main__":

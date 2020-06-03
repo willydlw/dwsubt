@@ -15,24 +15,44 @@ set (SUBT_VERSION_FULL
 find_package(catkin REQUIRED
   COMPONENTS
     message_generation
+    std_msgs
     subt_ign
     roscpp
     rospy
     sensor_msgs
     laser_geometry
+    roslaunch
 )
+
+roslaunch_add_file_check(launch)
 
 ### find_package(gazebo REQUIRED)
 
-catkin_package(
-  CATKIN_DEPENDS message_runtime
-)
+
 
 ########################
 ## Message generation ##
 ########################
 
 # Add here SubT ROS messages.
+
+add_message_files(
+  FILES 
+  Turn.msg
+)
+
+generate_messages(
+  DEPENDENCIES 
+  std_msgs
+)
+
+
+catkin_package(
+  CATKIN_DEPENDS message_runtime roscpp rospy std_msgs 
+)
+
+
+
 
 ###########
 ## Build ##
