@@ -17,6 +17,7 @@ find_package(catkin REQUIRED
     message_generation
     subt_ign
     roscpp
+    rospy
     sensor_msgs
     laser_geometry
 )

@@ -1,0 +1,6 @@
+<launch>
+  <!-- Launch the wall follower with parameters -->
+  <node pkg="dwsubt" name="laser_obstacle_avoid" type="laser_obstacle_avoid.py" output="screen">
+   <rosparam command="load" file="$(find dwsubt)/params.yaml"/>
+  </node>
+</launch>
