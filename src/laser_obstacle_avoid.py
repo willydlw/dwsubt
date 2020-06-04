@@ -124,16 +124,13 @@ class LaserObstacleAvoid:
 
       self.turn_publisher.publish(turn_msg)
 
-      if self.printCount == 1:
-         self.printCount += 1
-
-         print("min angle, max_angle")
-         print(min_angle, max_angle)
+      print("min angle, max_angle")
+      print(min_angle, max_angle)
          
-         print("max gap, average gap, turn angle")
-         print(max_gap,average_gap,turn_angle)
+      print("max gap, average gap, turn angle")
+      print(max_gap,average_gap,turn_angle)
 
-         print("angz: " + str(angz) + str(" degrees"))
+      print("angz: " + str(angz) + str(" degrees"))
 
 
 
@@ -141,7 +138,7 @@ def main():
    rospy.init_node('laser_avoid_obstacle')
    laserObstacleAvoid = LaserObstacleAvoid()
 
-   rate = rospy.Rate(10)   # Hz
+   rate = rospy.Rate(1)   # Hz
 
    while not rospy.is_shutdown():
       rate.sleep()
