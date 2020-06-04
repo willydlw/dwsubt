@@ -4,7 +4,7 @@ Clone the repository in the src directory of a catkin workspace.
 ```
 cd ~/catkin_ws/src
 git clone https://github.com/willydlw/dwsubt.git
-catkin_make install
+catkin_make 
 ```
 
 
@@ -27,6 +27,7 @@ ign launch -v 4 cave_circuit.ign worldName:=simple_cave_01 robotName1:=X1 robotC
 In the catkin workspace directory
 
 ```
-source ./install/setup.bash
-roslaunch dwsubt base_control.launch
+source ./devel/setup.bash
+roslaunch dwsubt laser_obstacle_avoid.launch
 ```
+
