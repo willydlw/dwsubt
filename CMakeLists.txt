@@ -71,7 +71,7 @@ link_directories(
 add_executable(base_control_node src/base_control_node.cc src/mission.cpp)
 add_executable(laserscan_to_pointcloud src/laserscan_to_pointcloud.cpp)
 
-add_dependencies(base_control_node ${catkin_EXPORTED_TARGETS})
+add_dependencies(base_control_node ${cpp_python_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(laserscan_to_pointcloud ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(base_control_node ${catkin_LIBRARIES})

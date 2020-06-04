@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import rospy
 from rospy.numpy_msg import numpy_msg
 from sensor_msgs.msg import LaserScan
+
+# import custom message: pattern is package_name.msg import message name
 from dwsubt.msg import Turn
 
 from itertools import *
@@ -64,7 +66,7 @@ class LaserObstacleAvoid:
       # measurement that met threshold criteria
       thresholded_indices = list(angleIndices[distance_mask])
       
-      max_gap = 40  # degrees
+      max_gap = 20  # degrees
       gap_list = []
 
       

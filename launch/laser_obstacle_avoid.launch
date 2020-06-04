@@ -1,6 +1,24 @@
 <launch>
-  <!-- Launch the wall follower with parameters -->
+  <!-- Arguments -->
+  <arg name="robot_name" default="" />
+
+  <!-- sets log level-->
+  <env name="ROSCONSOLE_CONFIG_FILE" value="$(find dwsubt)/config/custom_rosconsole.conf"/>   
+
+   <!-- Launch your controller nodes -->
+  <node name="$(arg robot_name)dwsubt" pkg="dwsubt" type="base_control_node" output="screen" args="$(arg robot_name)"/>
+
+  <!-- Launch obstacle avoidance, gap detector with parameters -->
   <node pkg="dwsubt" name="laser_obstacle_avoid" type="laser_obstacle_avoid.py" output="screen">
    <rosparam command="load" file="$(find dwsubt)/params.yaml"/>
   </node>
+
+  <!-- Launch rviz -->
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find dwsubt)/rviz/avoidObstacle.rviz " />
+
 </launch>
+
+
+
+
+  

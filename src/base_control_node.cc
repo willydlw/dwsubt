@@ -33,6 +33,9 @@
 #include <string>
 #include <thread>
 
+// custom message include <package_name/header file>
+#include <dwsubt/Turn.h>
+
 #include "mission.h"
 
 /// \brief Robot base control class, running as a ROS node to control a robot.
@@ -58,13 +61,24 @@ class BaseController
    /// start position to entrance of tunnel, cave, urban.
    private: void MoveToEntrance(void);
 
-
+   /// \brief state machine
    public: void Update();
+
+   /// \brief subscriber callback
+   public: void AvoidObstacleTurnCallback(const dwsubt::Turn::ConstPtr &msg);
+
+   
+   /// \brief robot name
+   private: std::string rname;
+
+   private: double turnAngleZ;
 
 
    /// \brief ROS node handler
    private: ros::NodeHandle nh;
 
+   /// \brief subscriber for avoid obstacle turn angle
+   private: ros::Subscriber turnAngleSub;
 
    /// \brief publisher to send cmd_vel
    private: ros::Publisher velPub;
@@ -81,12 +95,10 @@ class BaseController
    /// \brief mission state
    private: MissionState missionState;
 
-
    /// \brief True if robot has arrived at destination
    private: bool arrived{false};
 
-   /// \brief robot name
-   private: std::string rname;
+  
 
 };
 
@@ -108,6 +120,9 @@ BaseController::BaseController(const std::string &name)
    ROS_DEBUG_STREAM("mission state: " << this->missionState);
 
    this->rname = name;
+   ROS_INFO("Using robot name[%s]\n", this->rname.c_str());
+
+   this->turnAngleZ = 0.0;
 }
 
 
@@ -138,12 +153,15 @@ bool BaseController::StartUp()
     this->velPub = this->nh.advertise<geometry_msgs::Twist>(
         this->rname + "/cmd_vel", 1);
 
-    // Create a cmd_vel publisher to control a vehicle.
-    this->originClient = this->nh.serviceClient<subt_msgs::PoseFromArtifact>(
+   // Create 
+   this->turnAngleSub = this->nh.subscribe("/avoid_obstacle_turn", 5, &BaseController::AvoidObstacleTurnCallback, this);
+
+   // request pose relative to the origin
+   this->originClient = this->nh.serviceClient<subt_msgs::PoseFromArtifact>(
         "/subt/pose_from_artifact_origin", true);
-    this->originSrv.request.robot_name.data = this->rname;
+   this->originSrv.request.robot_name.data = this->rname;
    
-    return true;
+   return true;
 }
 
 
@@ -190,24 +208,30 @@ void BaseController::Update()
       break;
 
       case MissionState::EXPLORE:
-        
-         ROS_ERROR("BaseController::Update MissionState::EXPLORE not completed");
+        {
+           geometry_msgs::Twist msg;
+           msg.linear.x = 1.0;
+           msg.angular.z = this->turnAngleZ;
+           ROS_INFO("EXPLORE state, turn angle z: %f", this->turnAngleZ);
+           this->velPub.publish(msg);
+        }
+         
       break;
 
       case MissionState::STANDBY:
-         if(printCount == 1)
-         {
-            ROS_ERROR("BaseController::Update MissionState::STANDBY not completed");
-            ROS_INFO("no more messages after this one, press ctrl+c to end");
-            ++printCount;
-         }
-         
+         this->missionState = MissionState::EXPLORE;
+         ROS_DEBUG("changing state from STANDBY to EXPLORE");
       break;
 
       case MissionState::STOP:
          ROS_ERROR("BaseController::Update MissionState::STOP not completed");
       break;
    }
+}
+
+void BaseController::AvoidObstacleTurnCallback(const dwsubt::Turn::ConstPtr &msg)
+{
+   this->turnAngleZ = msg->anglez;
 }
 
 
