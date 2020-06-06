@@ -1,0 +1,20 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="robot_name" default="" />
+
+  <!-- sets log level-->
+  <env name="ROSCONSOLE_CONFIG_FILE" value="$(find dwsubt)/config/custom_rosconsole.conf"/>   
+
+  <!-- Launch free space visualization  with parameters -->
+  <node pkg="dwsubt" name="freespace_visualizer" type="freespace_visualizer.py" output="screen">
+   <rosparam command="load" file="$(find dwsubt)/laser_planar5m_params.yaml"/>
+  </node>
+
+  <!-- Launch rviz -->
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find dwsubt)/rviz/freespace_visualizer_X1.rviz " />
+</launch>
+
+
+
+
+  
