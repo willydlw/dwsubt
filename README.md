@@ -13,6 +13,7 @@ Clone the repository in the src directory of a catkin workspace.
 ```
 cd ~/catkin_ws/src
 git clone https://github.com/willydlw/dwsubt.git
+cd ~/catkin_ws
 catkin_make 
 ```
 
