@@ -1,0 +1,4 @@
+# Laser obstacle avoidance parameters
+
+distance_threshold: 4.0     # meters
+
