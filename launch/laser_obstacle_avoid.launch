@@ -10,7 +10,8 @@
 
   <!-- Launch obstacle avoidance, gap detector with parameters -->
   <node pkg="dwsubt" name="laser_obstacle_avoid" type="laser_obstacle_avoid.py" output="screen">
-   <rosparam command="load" file="$(find dwsubt)/params.yaml"/>
+   <rosparam command="load" file="$(find dwsubt)/laser_planar5m_params.yaml"/>
+   <rosparam command="load" file="$(find dwsubt)/avoid_obstacle_params.yaml"/>
   </node>
 
   <!-- Launch rviz -->

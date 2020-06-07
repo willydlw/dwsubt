@@ -26,8 +26,7 @@ class LaserObstacleAvoid:
    RANGE_MIN = rospy.get_param("/laser_obstacle_avoid/range_min")                # meter, m
    RANGE_MAX = rospy.get_param("/laser_obstacle_avoid/range_max")               # meter, m
    DISTANCE_THRESHOLD = rospy.get_param("/laser_obstacle_avoid/distance_threshold")
-   MIN_GAP = rospy.get_param("/laser_obstacle_avoid/min_gap")
-   #NUM_MEASUREMENTS = rospy.get_param("/dwsubt/num_measurements")
+   
   
 
    def __init__(self):
