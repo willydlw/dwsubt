@@ -47,7 +47,9 @@ roslaunch dwsubt laser_obstacle_avoid.launch
 
 Currently working on the free_space_visualizer node to plot the detected free space openings. Want a verification tool that allows us to see the openings are correctly detected and show which opening is selected as a goal point.
 
-The current state plots the laser scan in its xy coordinate form. Next step is plotting the free space openings.
+The current state plots the laser scan in its xy coordinate form. The free space endpoints are connected by dashed lines.
+
+Note: This has not yet been tested on a moving robot.
 
 
 ### Running the program 
@@ -72,6 +74,6 @@ roslaunch dwsubt freespace_visualizer.launch
 The image below shows the expected output.
 
 
-![Laser XY data points](./images/xy_data_2020-06-06.png "laser data")
+![Laser XY data points](./images/xy_data_freespace.png "laser data")
 
 
