@@ -27,8 +27,9 @@ DISTANCE_THRESHOLD = rospy.get_param("/freespace_visualizer/distance_threshold")
 
 # Global Variables
 global cosVal, sinVal 
+global printCount 
 
-
+printCount = 0
 
 
 # pre-compute sin,cos values as they will be the same for each scan
@@ -42,6 +43,8 @@ angleIndices = np.arange(NUM_MEASUREMENTS)
 
 # laser data callback 
 def free_space_scan_cb(msg):
+
+   global printCount
    
    gapList = []
    xmin = []
@@ -112,31 +115,35 @@ def free_space_scan_cb(msg):
       xmax.append(cosVal[g[-1]] * msg.ranges[g[-1]])
       ymax.append(sinVal[g[-1]] * msg.ranges[g[-1]])
 
-   plt.clf()         # clear all figures
-   plt.figure(1)
+   if( (printCount % 25) == 0):
+      plt.clf()         # clear all figures
+      plt.figure(1)
 
-   # plot x y data points
-   plt.plot(xdata, ydata, 'b.', label="scan data")
+      # plot x y data points
+      plt.plot(xdata, ydata, 'b.', label="scan data")
 
-   # plot line for each free space region from min to max angle in region
-   for i in range(len(xmin)):
-      plt.plot([xmin[i], xmax[i]],[ymin[i], ymax[i]], linestyle="dashed", linewidth = 3, label=('freespace '+str(i)))
-      
-   plt.grid(True)
-   plt.legend()
+      # plot line for each free space region from min to max angle in region
+      for i in range(len(xmin)):
+         plt.plot([xmin[i], xmax[i]],[ymin[i], ymax[i]], linestyle="dashed", linewidth = 3, label=('freespace '+str(i)))
+         
+      plt.grid(True)
+      plt.legend()
 
-   plt.xlim([ -RANGE_MAX-1, RANGE_MAX+1])
-   plt.ylim([ -RANGE_MAX-1, RANGE_MAX+1])
-   plt.ylabel("y [m]")
-   plt.xlabel("x [m]")
-   plt.title("free space, distance threshold: " + str(DISTANCE_THRESHOLD))
-   plt.pause(0.001) 
+      plt.xlim([ -RANGE_MAX-1, RANGE_MAX+1])
+      plt.ylim([ -RANGE_MAX-1, RANGE_MAX+1])
+      plt.ylabel("y [m]")
+      plt.xlabel("x [m]")
+      plt.title("free space, distance threshold: " + str(DISTANCE_THRESHOLD))
+      plt.pause(0.001)
+      print(printCount)
+      #plt.show(False) 
+   printCount += 1
    
 
 
 # initialize ros node and subsribe to topic
 rospy.init_node('free_space_visualizer', anonymous = True)
-rospy.Subscriber(SCAN_TOPIC, LaserScan, free_space_scan_cb);
+rospy.Subscriber(SCAN_TOPIC, LaserScan, free_space_scan_cb)
 
 
 try:

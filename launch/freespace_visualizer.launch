@@ -15,7 +15,3 @@
   <node type="rviz" name="rviz" pkg="rviz" args="-d $(find dwsubt)/rviz/freespace_visualizer_X1.rviz " />
 </launch>
 
-
-
-
-  
