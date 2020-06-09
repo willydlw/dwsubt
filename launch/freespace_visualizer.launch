@@ -7,8 +7,8 @@
 
   <!-- Launch free space visualization  with parameters -->
   <node pkg="dwsubt" name="freespace_visualizer" type="freespace_visualizer.py" output="screen">
-   <rosparam command="load" file="$(find dwsubt)/laser_planar5m_params.yaml"/>
-   <rosparam command="load" file="$(find dwsubt)/avoid_obstacle_params.yaml"/>
+   <rosparam command="load" file="$(find dwsubt)/config/laser_planar5m_params.yaml"/>
+   <rosparam command="load" file="$(find dwsubt)/config/avoid_obstacle_params.yaml"/>
   </node>
 
   <!-- Launch rviz -->
