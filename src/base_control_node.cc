@@ -72,6 +72,7 @@ class BaseController
    private: std::string rname;
 
    private: double turnAngleZ;
+   private: double linearX;
 
 
    /// \brief ROS node handler
@@ -122,6 +123,7 @@ BaseController::BaseController(const std::string &name)
    this->rname = name;
    ROS_INFO("Using robot name[%s]\n", this->rname.c_str());
 
+   this->linearX = 0.0;
    this->turnAngleZ = 0.0;
 }
 
@@ -210,9 +212,9 @@ void BaseController::Update()
       case MissionState::EXPLORE:
         {
            geometry_msgs::Twist msg;
-           msg.linear.x = 1.0;
+           msg.linear.x = this->linearX;
            msg.angular.z = this->turnAngleZ;
-           ROS_INFO("EXPLORE state, turn angle z: %f", this->turnAngleZ);
+           ROS_INFO("EXPLORE state, linear x: %f, turn angle z: %f", this->linearX, this->turnAngleZ);
            this->velPub.publish(msg);
         }
          
@@ -231,6 +233,7 @@ void BaseController::Update()
 
 void BaseController::AvoidObstacleTurnCallback(const dwsubt::Turn::ConstPtr &msg)
 {
+   this->linearX = msg->linearx;
    this->turnAngleZ = msg->anglez;
 }
 
