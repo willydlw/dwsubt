@@ -119,6 +119,7 @@ class LaserObstacleAvoid:
       # publish turn angle
       turn_msg = Turn()
       turn_msg.header.stamp = rospy.Time.now()
+      turn_msg.linearx = 1.0
       turn_msg.anglez = angz
 
       self.turn_publisher.publish(turn_msg)
