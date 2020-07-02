@@ -14,8 +14,10 @@ set (SUBT_VERSION_FULL
 
 find_package(catkin REQUIRED
   COMPONENTS
+    actionlib_msgs
     message_generation
     std_msgs
+    geometry_msgs
     subt_ign
     roscpp
     rospy
@@ -36,6 +38,11 @@ roslaunch_add_file_check(launch)
 
 # Add here SubT ROS messages.
 
+add_action_files(
+  DIRECTORY action 
+  FILES go_to_goal.action 
+)
+
 add_message_files(
   FILES 
   Turn.msg
@@ -43,12 +50,20 @@ add_message_files(
 
 generate_messages(
   DEPENDENCIES 
+  actionlib_msgs 
   std_msgs
+  geometry_msgs
 )
 
 
 catkin_package(
-  CATKIN_DEPENDS message_runtime roscpp rospy std_msgs 
+  CATKIN_DEPENDS 
+  message_runtime 
+  roscpp 
+  rospy 
+  std_msgs
+  actionlib_msgs 
+  geometry_msgs
 )
 
 
