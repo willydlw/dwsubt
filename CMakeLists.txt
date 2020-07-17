@@ -40,7 +40,7 @@ roslaunch_add_file_check(launch)
 
 add_action_files(
   DIRECTORY action 
-  FILES go_to_goal.action 
+  FILES GoToGoal.action 
 )
 
 add_message_files(

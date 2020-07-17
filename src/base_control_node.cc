@@ -257,6 +257,11 @@ void BaseController::MoveToEntrance(void)
 
   auto pose = this->originSrv.response.pose.pose;
 
+  ROS_INFO_STREAM("originSrv, x: " << pose.position.x);
+  ROS_INFO_STREAM("originSrv, y: " << pose.position.y);
+  ROS_INFO_STREAM("originSrv, z: " << pose.position.z);
+
+
   // Simple example for robot to go to entrance
   geometry_msgs::Twist msg;
 
