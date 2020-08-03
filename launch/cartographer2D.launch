@@ -10,8 +10,8 @@
       -configuration_basename cartographer_$(arg mode)_$(arg name).lua"
       >
 
-      <remap from="scan" to "/X1/front_scan"
-      <remap from="points2" to="/X1/points" />
+      <remap from="scan" to="/X1/front_scan"/>
+      <!-- <remap from="points2" to="/X1/points" /> -->
       <remap from="imu" to="/X1/imu/data"/>
       <remap from="odom" to="/X1/odom"/>
   </node>
