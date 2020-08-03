@@ -27,6 +27,14 @@ config/cartographer/cartograhper_X1.lua
 
 Example: my ros package name is dwsubt. I put the cartographer.launch file in dwsubt/launch/. The lua files were copied to dwsubt/config/cartographer/
 
+I renamed cartographer.launch to cartographer3d.launch and then created a cartographer2d.launch file that references the cartographer_2d.lua file.
+
+Made the following changes to the cartographer_2d.lua file:
+- tracking_frame = name,
+- published_frame = name,
+
+Removed the remapping of the points topic to scan in the cartographer2d.launch file as the 2d LaserScan topic is usually named scan. **TODO** Verify this is correct. Did not yet find correct topic name in cartographer documentation.
+<br> <br>
 
 2. Add the cartographer_ros dependency to the package.xml file
 
@@ -35,7 +43,7 @@ Example: my ros package name is dwsubt. I put the cartographer.launch file in dw
 ```
 <br><br>
 
-## Edit the cartographer.launch file
+## Edit the cartographer.launch files
 
 Replace subt_solution_launch with the name of your package, as shown below. 
 
@@ -49,7 +57,7 @@ Run catkin_make or catkin_make install. Thought this was necessary due to updati
 
 <br><br>
 
-## Test Cartographer 
+## Test Cartographer 2D
 
 I used the simple_cave_01, joystick teleop, and rviz to test cartographer.
 
@@ -70,14 +78,23 @@ roslaunch subt_example teleop.launch
 ```
 
 
-### Terminal 3
+### Terminal 3 
 
 ```
 source ~/catkin_ws/devel/setup.bash
-rviz trial_cartographer.rviz
+roslaunch dwsubt cartographer2d.launch name:=X1
 ```
 
+
 ### Terminal 4
+
+```
+source ~/catkin_ws/devel/setup.bash
+rviz dwsubt cartographer2d.rviz
+```
+
+
+### Terminal 5
 
 If you want to run the blob detector, in case you come across a red backpack:
 
@@ -86,3 +103,5 @@ source ~/catkin_ws/devel/setup.bash
 rosrun simple_detect find_red_blob.py
 ``` 
 
+
+**TODO** Test cartographer3d.launch file with a 3D Lidar scanner
